@@ -27,7 +27,7 @@ namespace MarkingSections.ViewModels
 
         #region Заголовок
 
-        private string _title = "Комнаты";
+        private string _title = "Разметка секций";
 
         public string Title
         {
@@ -71,14 +71,18 @@ namespace MarkingSections.ViewModels
 
 
         #region Конструктор класса MainWindowViewModel
-        public MainWindowViewModel()
+        public MainWindowViewModel(RevitModelForfard revitModel)
         {
+            RevitModel = revitModel;
+
             #region
 
             GetRoomsCommand = new LambdaCommand(OnGetRoomsCommandExecuted, CanGetRoomsCommandExecute);
 
             #endregion
         }
+
+        public MainWindowViewModel() { }
         #endregion
     }
 }
