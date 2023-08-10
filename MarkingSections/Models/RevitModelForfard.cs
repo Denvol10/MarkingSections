@@ -65,5 +65,23 @@ namespace MarkingSections
             RoadAxis = new PolyCurve(lines);
         }
         #endregion
+
+        #region Начальная линия
+        public Curve StartLine { get; set; }
+
+        private string _startLineElemIds;
+        public string StartLineElemIds
+        {
+            get => _startLineElemIds;
+            set => _startLineElemIds = value;
+        }
+
+        public void GetStartLine()
+        {
+            StartLine = RevitGeometryUtils.GetStartLine(Uiapp, out _startLineElemIds);
+        }
+        #endregion
+
+
     }
 }

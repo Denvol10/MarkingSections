@@ -92,9 +92,11 @@
                 <UniformGrid Rows="2">
                     <TextBlock Text="Начальная линия"
                                Style="{StaticResource TextAboveButton}" />
-                    <Button Style="{StaticResource SelectButton}" />
+                    <Button Style="{StaticResource SelectButton}"
+                            Command="{Binding GetStartLineCommand}"/>
                 </UniformGrid>
-                <TextBox Style="{StaticResource SelectedItemsBox}" />
+                <TextBox Style="{StaticResource SelectedItemsBox}"
+                         Text="{Binding StartLineElemIds, Mode=OneWay}"/>
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Параметры"

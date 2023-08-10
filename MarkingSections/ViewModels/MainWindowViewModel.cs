@@ -45,6 +45,16 @@ namespace MarkingSections.ViewModels
         }
         #endregion
 
+        #region Начальная линия
+        private string _startLineElemIds;
+
+        public string StartLineElemIds
+        {
+            get => _startLineElemIds;
+            set => Set(ref _startLineElemIds, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -59,6 +69,23 @@ namespace MarkingSections.ViewModels
         }
 
         private bool CanGetRoadAxisCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Получение начальной линии
+        public ICommand GetStartLineCommand { get; }
+
+        private void OnGetStartLineCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            RevitModel.GetStartLine();
+            StartLineElemIds = RevitModel.StartLineElemIds;
+            RevitCommand.mainView.ShowDialog();
+        }
+
+        private bool CanGetStartLineCommandExecute(object parameter)
         {
             return true;
         }
@@ -107,6 +134,7 @@ namespace MarkingSections.ViewModels
 
             #region Команды
             GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
+            GetStartLineCommand = new LambdaCommand(OnGetStartLineCommandExecuted, CanGetStartLineCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }

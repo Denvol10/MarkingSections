@@ -24,51 +24,17 @@ namespace MarkingSections.Models
             return curvesRoadAxis;
         }
 
-        // Метод получения строки с ElementId
-        private static string ElementIdToString(IEnumerable<Element> elements)
+        // Получение начальной линии
+        public static Curve GetStartLine(UIApplication uiapp, out string elementIds)
         {
-            var stringArr = elements.Select(e => "Id" + e.Id.IntegerValue.ToString()).ToArray();
-            string resultString = string.Join(", ", stringArr);
-
-            return resultString;
-        }
-
-        // Получение линий на основе элементов DirectShape
-        private static List<Curve> GetCurvesByDirectShapes(IEnumerable<DirectShape> directShapes)
-        {
-            var curves = new List<Curve>();
-
+            Selection sel = uiapp.ActiveUIDocument.Selection;
+            var boundCurvePicked = sel.PickObject(ObjectType.Element, new ModelLineElementFilter() ,"Выберете начальную линию");
             Options options = new Options();
-            var geometries = directShapes.Select(d => d.get_Geometry(options)).SelectMany(g => g);
+            Element curveElement = uiapp.ActiveUIDocument.Document.GetElement(boundCurvePicked);
+            elementIds = "Id" + curveElement.Id.IntegerValue;
+            var boundCurve = curveElement.get_Geometry(options).First() as Curve;
 
-            foreach (var geom in geometries)
-            {
-                if (geom is PolyLine polyLine)
-                {
-                    var polyCurve = GetCurvesByPolyline(polyLine);
-                    curves.AddRange(polyCurve);
-                }
-                else
-                {
-                    curves.Add(geom as Curve);
-                }
-            }
-
-            return curves;
-        }
-
-        // Метод получения списка линий на основе полилинии
-        private static IEnumerable<Curve> GetCurvesByPolyline(PolyLine polyLine)
-        {
-            var curves = new List<Curve>();
-
-            for (int i = 0; i < polyLine.NumberOfCoordinates - 1; i++)
-            {
-                var line = Line.CreateBound(polyLine.GetCoordinate(i), polyLine.GetCoordinate(i + 1));
-                curves.Add(line);
-            }
-
-            return curves;
+            return boundCurve;
         }
 
         // Проверка на то существуют ли элементы с данным Id в модели
@@ -121,6 +87,53 @@ namespace MarkingSections.Models
             var lines = GetCurvesByDirectShapes(directShapeLines).OfType<Curve>().ToList();
 
             return lines;
+        }
+
+        // Метод получения строки с ElementId
+        private static string ElementIdToString(IEnumerable<Element> elements)
+        {
+            var stringArr = elements.Select(e => "Id" + e.Id.IntegerValue.ToString()).ToArray();
+            string resultString = string.Join(", ", stringArr);
+
+            return resultString;
+        }
+
+        // Получение линий на основе элементов DirectShape
+        private static List<Curve> GetCurvesByDirectShapes(IEnumerable<DirectShape> directShapes)
+        {
+            var curves = new List<Curve>();
+
+            Options options = new Options();
+            var geometries = directShapes.Select(d => d.get_Geometry(options)).SelectMany(g => g);
+
+            foreach (var geom in geometries)
+            {
+                if (geom is PolyLine polyLine)
+                {
+                    var polyCurve = GetCurvesByPolyline(polyLine);
+                    curves.AddRange(polyCurve);
+                }
+                else
+                {
+                    curves.Add(geom as Curve);
+                }
+            }
+
+            return curves;
+        }
+
+        // Метод получения списка линий на основе полилинии
+        private static IEnumerable<Curve> GetCurvesByPolyline(PolyLine polyLine)
+        {
+            var curves = new List<Curve>();
+
+            for (int i = 0; i < polyLine.NumberOfCoordinates - 1; i++)
+            {
+                var line = Line.CreateBound(polyLine.GetCoordinate(i), polyLine.GetCoordinate(i + 1));
+                curves.Add(line);
+            }
+
+            return curves;
         }
     }
 }
