@@ -80,6 +80,20 @@ namespace MarkingSections
         {
             StartLine = RevitGeometryUtils.GetStartLine(Uiapp, out _startLineElemIds);
         }
+
+        public void GetStartLineBySettings(string elementId)
+        {
+            StartLine = RevitGeometryUtils.GetStartLineById(Doc, elementId);
+        }
+        #endregion
+
+        #region Проверка на то существует начальная линия
+        public bool IsStartLineExistInModel(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+
+            return RevitGeometryUtils.IsElemsExistInModel(Doc, elemIds, typeof(ModelLine));
+        }
         #endregion
 
 

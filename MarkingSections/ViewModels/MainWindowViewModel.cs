@@ -111,6 +111,7 @@ namespace MarkingSections.ViewModels
         private void SaveSettings()
         {
             Properties.Settings.Default["RoadAxisElemIds"] = RoadAxisElemIds;
+            Properties.Settings.Default["StartLineElemIds"] = StartLineElemIds;
             Properties.Settings.Default.Save();
         }
 
@@ -128,6 +129,18 @@ namespace MarkingSections.ViewModels
                 {
                     RoadAxisElemIds = axisElemIdInSettings;
                     RevitModel.GetAxisBySettings(axisElemIdInSettings);
+                }
+            }
+            #endregion
+
+            #region Инициализация значения стартовой линии
+            if (!(Properties.Settings.Default["StartLineElemIds"] is null))
+            {
+                string startLineElemIdInSettings = Properties.Settings.Default["StartLineElemIds"].ToString();
+                if(RevitModel.IsStartLineExistInModel(startLineElemIdInSettings) && !string.IsNullOrEmpty(startLineElemIdInSettings))
+                {
+                    StartLineElemIds = startLineElemIdInSettings;
+                    RevitModel.GetStartLineBySettings(startLineElemIdInSettings);
                 }
             }
             #endregion

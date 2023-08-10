@@ -37,6 +37,18 @@ namespace MarkingSections.Models
             return boundCurve;
         }
 
+        // Получение линии по Id
+        public static Curve GetStartLineById(Document doc, string elemIdInSettings)
+        {
+            var elemId = GetIdsByString(elemIdInSettings).First();
+            ElementId modelLineId = new ElementId(elemId);
+            Element modelLine = doc.GetElement(modelLineId);
+            Options options = new Options();
+            Curve line = modelLine.get_Geometry(options).First() as Curve;
+
+            return line;
+        }
+
         // Проверка на то существуют ли элементы с данным Id в модели
         public static bool IsElemsExistInModel(Document doc, IEnumerable<int> elems, Type type)
         {
