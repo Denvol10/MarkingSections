@@ -79,9 +79,11 @@
                 <UniformGrid Rows="2">
                     <TextBlock Text="Линии оси трассы"
                                Style="{StaticResource TextAboveButton}" />
-                    <Button Style="{StaticResource SelectButton}" />
+                    <Button Style="{StaticResource SelectButton}"
+                            Command="{Binding GetRoadAxisCommand}" />
                 </UniformGrid>
-                <TextBox Style="{StaticResource SelectedItemsBox}" />
+                <TextBox Style="{StaticResource SelectedItemsBox}"
+                         Text="{Binding RoadAxisElemIds, Mode=OneWay}" />
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Линии"
@@ -130,11 +132,10 @@
             <UniformGrid Columns="2"
                          Margin="0,12,0,5">
                 <Button Content="Создать"
-                        Style="{StaticResource SelectButton}"
-                        Command="{Binding CreatePostsCommand}" />
+                        Style="{StaticResource SelectButton}" />
                 <Button Content="Отмена"
                         Style="{StaticResource SelectButton}"
-                        Command="{Binding CloseWindow}" />
+                        Command="{Binding CloseWindowCommand}" />
             </UniformGrid>
         </GroupBox>
     </StackPanel>

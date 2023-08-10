@@ -26,7 +26,6 @@ namespace MarkingSections.ViewModels
         }
 
         #region Заголовок
-
         private string _title = "Разметка секций";
 
         public string Title
@@ -34,37 +33,50 @@ namespace MarkingSections.ViewModels
             get => _title;
             set => Set(ref _title, value);
         }
-
         #endregion
 
-        #region Список комнат
+        #region Элементы оси трассы
+        private string _roadAxisElemIds;
 
-        private ObservableCollection<string> _rooms;
-
-        public ObservableCollection<string> Rooms
+        public string RoadAxisElemIds
         {
-            get => _rooms;
-            set => Set(ref _rooms, value);
+            get => _roadAxisElemIds;
+            set => Set(ref _roadAxisElemIds, value);
         }
-
         #endregion
 
         #region Команды
 
-        #region Команда получение всех комнат
+        #region Получение оси трассы
+        public ICommand GetRoadAxisCommand { get; }
 
-        public ICommand GetRoomsCommand { get; }
-
-        private void OnGetRoomsCommandExecuted(object parameter)
+        private void OnGetRoadAxisCommandExecuted(object parameter)
         {
-            Rooms = new ObservableCollection<string>(RevitModel.GetAllRooms());
+            RevitCommand.mainView.Hide();
+            RevitModel.GetPolyCurve();
+            RoadAxisElemIds = RevitModel.RoadAxisElemIds;
+            RevitCommand.mainView.ShowDialog();
         }
 
-        private bool CanGetRoomsCommandExecute(object parameter)
+        private bool CanGetRoadAxisCommandExecute(object parameter)
         {
             return true;
         }
+        #endregion
 
+        #region Закрыть окно
+        public ICommand CloseWindowCommand { get; }
+
+        private void OnCloseWindowCommandExecuted(object parameter)
+        {
+            //SaveSettings();
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCloseWindowCommandExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
 
         #endregion
@@ -75,10 +87,9 @@ namespace MarkingSections.ViewModels
         {
             RevitModel = revitModel;
 
-            #region
-
-            GetRoomsCommand = new LambdaCommand(OnGetRoomsCommandExecuted, CanGetRoomsCommandExecute);
-
+            #region Команды
+            GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
+            CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }
 

@@ -10,32 +10,42 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
+using BridgeDeck.Models;
+using MarkingSections.Models;
 
 namespace MarkingSections
 {
     public class RevitModelForfard
     {
-        private UIApplication _uiapp = null;
-        private Application _app = null;
-        private UIDocument _uidoc = null;
-        private Document _doc = null;
+        private UIApplication Uiapp { get; set; } = null;
+        private Application App { get; set; } = null;
+        private UIDocument Uidoc { get; set; } = null;
+        private Document Doc { get; set; } = null;
 
         public RevitModelForfard(UIApplication uiapp)
         {
-            _uiapp = uiapp;
-            _app = uiapp.Application;
-            _uidoc = uiapp.ActiveUIDocument;
-            _doc = uiapp.ActiveUIDocument.Document;
+            Uiapp = uiapp;
+            App = uiapp.Application;
+            Uidoc = uiapp.ActiveUIDocument;
+            Doc = uiapp.ActiveUIDocument.Document;
         }
 
-        public List<string> GetAllRooms()
+        #region Ось трассы
+        public PolyCurve RoadAxis { get; set; }
+
+        private string _roadAxisElemIds;
+
+        public string RoadAxisElemIds
         {
-            var rooms = new FilteredElementCollector(_doc).OfCategory(BuiltInCategory.OST_Rooms)
-                                                          .Cast<Room>()
-                                                          .Select(r => r.Name)
-                                                          .ToList();
-
-            return rooms;
+            get => _roadAxisElemIds;
+            set => _roadAxisElemIds = value;
         }
+
+        public void GetPolyCurve()
+        {
+            var curves = RevitGeometryUtils.GetCurvesByRectangle(Uiapp, out _roadAxisElemIds);
+            RoadAxis = new PolyCurve(curves);
+        }
+        #endregion
     }
 }
