@@ -55,6 +55,16 @@ namespace MarkingSections.ViewModels
         }
         #endregion
 
+        #region Расстояние между линиями
+        private double _distanceBetweenLines = (double)Properties.Settings.Default["DistanceBetweenLines"];
+
+        public double DistanceBetweenLines
+        {
+            get => _distanceBetweenLines;
+            set => Set(ref _distanceBetweenLines, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -112,6 +122,7 @@ namespace MarkingSections.ViewModels
         {
             Properties.Settings.Default["RoadAxisElemIds"] = RoadAxisElemIds;
             Properties.Settings.Default["StartLineElemIds"] = StartLineElemIds;
+            Properties.Settings.Default["DistanceBetweenLines"] = DistanceBetweenLines;
             Properties.Settings.Default.Save();
         }
 
