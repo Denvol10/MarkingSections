@@ -119,7 +119,8 @@
                     <TextBlock Text="Длина линии, м"
                                Style="{StaticResource TextAboveButton}"
                                HorizontalAlignment="Left" />
-                    <TextBox Width="60"
+                    <TextBox Text="{Binding LineLength, UpdateSourceTrigger=PropertyChanged}"
+                             Width="60"
                              Height="20"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Center"
