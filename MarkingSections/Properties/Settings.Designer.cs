@@ -70,5 +70,17 @@ namespace MarkingSections.Properties {
                 this["LineLength"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsChangeDirection {
+            get {
+                return ((bool)(this["IsChangeDirection"]));
+            }
+            set {
+                this["IsChangeDirection"] = value;
+            }
+        }
     }
 }

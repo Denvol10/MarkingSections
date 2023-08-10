@@ -75,6 +75,16 @@ namespace MarkingSections.ViewModels
         }
         #endregion
 
+        #region Направление построения линии
+        private bool _isChangeDirection = (bool)Properties.Settings.Default["IsChangeDirection"];
+
+        public bool IsChangeDirection
+        {
+            get => _isChangeDirection;
+            set => Set(ref _isChangeDirection, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -134,6 +144,7 @@ namespace MarkingSections.ViewModels
             Properties.Settings.Default["StartLineElemIds"] = StartLineElemIds;
             Properties.Settings.Default["DistanceBetweenLines"] = DistanceBetweenLines;
             Properties.Settings.Default["LineLength"] = LineLength;
+            Properties.Settings.Default["IsChangeDirection"] = IsChangeDirection;
             Properties.Settings.Default.Save();
         }
 

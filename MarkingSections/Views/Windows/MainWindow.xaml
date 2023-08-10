@@ -128,7 +128,8 @@
                              Margin="6,0,0,0" />
                 </UniformGrid>
                 <CheckBox Content="Поменять направление"
-                          Style="{StaticResource CheckBoxStyle}" />
+                          Style="{StaticResource CheckBoxStyle}"
+                          IsChecked="{Binding IsChangeDirection}"/>
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Создание"
