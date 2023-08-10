@@ -30,6 +30,15 @@ namespace MarkingSections
             Doc = uiapp.ActiveUIDocument.Document;
         }
 
+        #region Проверка на то существуют линии оси и линии на поверхности в модели
+        public bool IsLinesExistInModel(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+
+            return RevitGeometryUtils.IsElemsExistInModel(Doc, elemIds, typeof(DirectShape));
+        }
+        #endregion
+
         #region Ось трассы
         public PolyCurve RoadAxis { get; set; }
 
@@ -45,6 +54,15 @@ namespace MarkingSections
         {
             var curves = RevitGeometryUtils.GetCurvesByRectangle(Uiapp, out _roadAxisElemIds);
             RoadAxis = new PolyCurve(curves);
+        }
+        #endregion
+
+        #region Получение оси трассы из Settings
+        public void GetAxisBySettings(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+            var lines = RevitGeometryUtils.GetCurvesById(Doc, elemIds);
+            RoadAxis = new PolyCurve(lines);
         }
         #endregion
     }

@@ -69,7 +69,7 @@ namespace MarkingSections.ViewModels
 
         private void OnCloseWindowCommandExecuted(object parameter)
         {
-            //SaveSettings();
+            SaveSettings();
             RevitCommand.mainView.Close();
         }
 
@@ -81,11 +81,29 @@ namespace MarkingSections.ViewModels
 
         #endregion
 
+        private void SaveSettings()
+        {
+            Properties.Settings.Default["RoadAxisElemIds"] = RoadAxisElemIds;
+            Properties.Settings.Default.Save();
+        }
+
 
         #region Конструктор класса MainWindowViewModel
         public MainWindowViewModel(RevitModelForfard revitModel)
         {
             RevitModel = revitModel;
+
+            #region Инициализация значения оси из Settings
+            if (!(Properties.Settings.Default["RoadAxisElemIds"] is null))
+            {
+                string axisElemIdInSettings = Properties.Settings.Default["RoadAxisElemIds"].ToString();
+                if(RevitModel.IsLinesExistInModel(axisElemIdInSettings) && !string.IsNullOrEmpty(axisElemIdInSettings))
+                {
+                    RoadAxisElemIds = axisElemIdInSettings;
+                    RevitModel.GetAxisBySettings(axisElemIdInSettings);
+                }
+            }
+            #endregion
 
             #region Команды
             GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
