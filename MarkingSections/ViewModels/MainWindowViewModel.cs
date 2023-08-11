@@ -85,6 +85,16 @@ namespace MarkingSections.ViewModels
         }
         #endregion
 
+        #region Количество линий
+        private int _countLines = (int)Properties.Settings.Default["CountLines"];
+
+        public int CountLines
+        {
+            get => _countLines;
+            set => Set(ref _countLines, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -145,6 +155,7 @@ namespace MarkingSections.ViewModels
             Properties.Settings.Default["DistanceBetweenLines"] = DistanceBetweenLines;
             Properties.Settings.Default["LineLength"] = LineLength;
             Properties.Settings.Default["IsChangeDirection"] = IsChangeDirection;
+            Properties.Settings.Default["CountLines"] = CountLines;
             Properties.Settings.Default.Save();
         }
 

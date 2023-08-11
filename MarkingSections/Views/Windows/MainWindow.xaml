@@ -130,25 +130,33 @@
                 <CheckBox Content="Поменять направление"
                           Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding IsChangeDirection}" />
-                <DockPanel >
-                    <TextBlock Text="Количество линий"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="115" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="Количество линий"
                                Style="{StaticResource TextAboveButton}"
                                HorizontalAlignment="Left" />
-                    <TextBox Width="60"
+                    <TextBox Text="{Binding CountLines}"
+                             Grid.Column="1"
+                             Width="60"
                              Height="20"
                              HorizontalAlignment="Right"
                              VerticalAlignment="Center"
-                             TextAlignment="Center"
-                             Margin="63,0,0,0" />
-                    <Slider Value="1"
+                             TextAlignment="Center" />
+                    <Slider Grid.Column="2"
+                            Value="{Binding CountLines}"
                             Minimum="1"
                             Maximum="20"
                             SmallChange="1"
-                            Width="90"
+                            Width="80"
                             Height="20"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center" />
-                </DockPanel>
+                </Grid>
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Создание"
