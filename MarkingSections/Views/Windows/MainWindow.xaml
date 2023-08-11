@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:MarkingSections"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="335"
+        Height="360"
         Width="350"
         Background="#f0f0f0"
         WindowStartupLocation="CenterScreen"
@@ -101,7 +101,7 @@
         </GroupBox>
         <GroupBox Header="Параметры"
                   Style="{StaticResource BorderGroupStyle}">
-            <UniformGrid Rows="3">
+            <UniformGrid Rows="4">
                 <UniformGrid Columns="2">
                     <TextBlock Text="Расстояние между линиями, м"
                                Style="{StaticResource TextAboveButton}"
@@ -129,7 +129,26 @@
                 </UniformGrid>
                 <CheckBox Content="Поменять направление"
                           Style="{StaticResource CheckBoxStyle}"
-                          IsChecked="{Binding IsChangeDirection}"/>
+                          IsChecked="{Binding IsChangeDirection}" />
+                <DockPanel >
+                    <TextBlock Text="Количество линий"
+                               Style="{StaticResource TextAboveButton}"
+                               HorizontalAlignment="Left" />
+                    <TextBox Width="60"
+                             Height="20"
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Center"
+                             TextAlignment="Center"
+                             Margin="63,0,0,0" />
+                    <Slider Value="1"
+                            Minimum="1"
+                            Maximum="20"
+                            SmallChange="1"
+                            Width="90"
+                            Height="20"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center" />
+                </DockPanel>
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Создание"
