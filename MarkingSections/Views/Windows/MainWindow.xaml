@@ -140,7 +140,7 @@
                                Text="Количество линий"
                                Style="{StaticResource TextAboveButton}"
                                HorizontalAlignment="Left" />
-                    <TextBox Text="{Binding CountLines}"
+                    <TextBox Text="{Binding CountLines, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="1"
                              Width="60"
                              Height="20"
