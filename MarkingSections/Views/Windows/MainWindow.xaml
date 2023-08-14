@@ -164,7 +164,8 @@
             <UniformGrid Columns="2"
                          Margin="0,12,0,5">
                 <Button Content="Создать"
-                        Style="{StaticResource SelectButton}" />
+                        Style="{StaticResource SelectButton}"
+                        Command="{Binding CreateLinesCommand}"/>
                 <Button Content="Отмена"
                         Style="{StaticResource SelectButton}"
                         Command="{Binding CloseWindowCommand}" />

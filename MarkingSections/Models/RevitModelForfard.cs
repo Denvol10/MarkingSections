@@ -12,6 +12,7 @@ using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using BridgeDeck.Models;
 using MarkingSections.Models;
+using MarkingSections.Infrastructure;
 
 namespace MarkingSections
 {
@@ -96,6 +97,50 @@ namespace MarkingSections
         }
         #endregion
 
+        #region Создание линий
+        public void CreateLines(double distBetweenLines, bool isChangeDirection, int countLines)
+        {
+            double startParameter;
+            bool isStartLineIntersectAxis = RoadAxis.Intersect(StartLine, out _, out startParameter);
+            if(!isStartLineIntersectAxis)
+            {
+                TaskDialog.Show("Предупреждение", "Линия не пересекается с осью");
+                return;
+            }
+
+            var newLineParameters = new List<double>();
+
+            double dist = UnitUtils.ConvertToInternalUnits(distBetweenLines, UnitTypeId.Meters);
+            for(int i = 1; i <= countLines; i++)
+            {
+                if(isChangeDirection)
+                {
+                    newLineParameters.Add(startParameter + dist * i);
+                }
+                else
+                {
+                    newLineParameters.Add(startParameter - dist * i);
+                }
+            }
+
+            if(!(newLineParameters.Min() >= 0 && newLineParameters.Max() <= RoadAxis.GetLength()))
+            {
+                TaskDialog.Show("Предупреждение", "Линии выходят за границы оси");
+                return;
+            }
+
+            using(Transaction trans = new Transaction(Doc, "Created Model Lines"))
+            {
+                trans.Start();
+                foreach(var parameter in newLineParameters)
+                {
+                    XYZ point = RoadAxis.GetPointOnPolycurve(parameter, out _);
+                    var refPoint = Doc.FamilyCreate.NewReferencePoint(point);
+                }
+                trans.Commit();
+            }
+        }
+        #endregion
 
     }
 }

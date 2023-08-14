@@ -131,6 +131,21 @@ namespace MarkingSections.ViewModels
         }
         #endregion
 
+        #region Создание линий
+        public ICommand CreateLinesCommand { get; }
+
+        private void OnCreateLinesCommandExecuted(object parameter)
+        {
+            RevitModel.CreateLines(DistanceBetweenLines, IsChangeDirection, CountLines);
+            SaveSettings();
+            RevitCommand.mainView.Close();
+        }
+        private bool CanCreateLinesCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
         #region Закрыть окно
         public ICommand CloseWindowCommand { get; }
 
@@ -192,6 +207,7 @@ namespace MarkingSections.ViewModels
             #region Команды
             GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
             GetStartLineCommand = new LambdaCommand(OnGetStartLineCommandExecuted, CanGetStartLineCommandExecute);
+            CreateLinesCommand = new LambdaCommand(OnCreateLinesCommandExecuted, CanCreateLinesCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }
