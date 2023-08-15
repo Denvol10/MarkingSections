@@ -67,6 +67,10 @@ namespace MarkingSections
         }
         #endregion
 
+        #region Плоскость для построения линий
+        private SketchPlane _sketchPlane;
+        #endregion
+
         #region Начальная линия
         public Curve StartLine { get; set; }
 
@@ -79,12 +83,12 @@ namespace MarkingSections
 
         public void GetStartLine()
         {
-            StartLine = RevitGeometryUtils.GetStartLine(Uiapp, out _startLineElemIds);
+            StartLine = RevitGeometryUtils.GetStartLine(Uiapp, out _startLineElemIds, out _sketchPlane);
         }
 
         public void GetStartLineBySettings(string elementId)
         {
-            StartLine = RevitGeometryUtils.GetStartLineById(Doc, elementId);
+            StartLine = RevitGeometryUtils.GetStartLineById(Doc, elementId, out _sketchPlane);
         }
         #endregion
 
@@ -98,7 +102,7 @@ namespace MarkingSections
         #endregion
 
         #region Создание линий
-        public void CreateLines(double distBetweenLines, bool isChangeDirection, int countLines)
+        public void CreateLines(double distBetweenLines, bool isChangeDirection, int countLines, double lineLength)
         {
             double startParameter;
             bool isStartLineIntersectAxis = RoadAxis.Intersect(StartLine, out _, out startParameter);
@@ -129,13 +133,37 @@ namespace MarkingSections
                 return;
             }
 
+            var planes = new List<Plane>();
+
+            foreach(var param in newLineParameters)
+            {
+                planes.Add(RoadAxis.GetPlaneOnPolycurve(param));
+            }
+
             using(Transaction trans = new Transaction(Doc, "Created Model Lines"))
             {
                 trans.Start();
-                foreach(var parameter in newLineParameters)
+                foreach(var plane in planes)
                 {
-                    XYZ point = RoadAxis.GetPointOnPolycurve(parameter, out _);
-                    var refPoint = Doc.FamilyCreate.NewReferencePoint(point);
+                    double halfLine = UnitUtils.ConvertToInternalUnits(lineLength / 2, UnitTypeId.Meters);
+                    XYZ vector = plane.XVec;
+                    if(vector.Z != 0)
+                    {
+                        vector = plane.YVec;
+                    }
+                    XYZ point1 = plane.Origin + vector.Normalize() * halfLine;
+                    XYZ point2 = plane.Origin - vector.Normalize() * halfLine;
+
+                    Line line = Line.CreateBound(point1, point2);
+                    if(Doc.IsFamilyDocument)
+                    {
+                        ModelCurve modelCurve = Doc.FamilyCreate.NewModelCurve(line, _sketchPlane);
+                    }
+                    else
+                    {
+                        ModelCurve modelCurve = Doc.Create.NewModelCurve(line, _sketchPlane);
+
+                    }
                 }
                 trans.Commit();
             }

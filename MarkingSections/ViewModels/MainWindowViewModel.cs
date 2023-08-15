@@ -136,9 +136,9 @@ namespace MarkingSections.ViewModels
 
         private void OnCreateLinesCommandExecuted(object parameter)
         {
-            RevitModel.CreateLines(DistanceBetweenLines, IsChangeDirection, CountLines);
+            RevitModel.CreateLines(DistanceBetweenLines, IsChangeDirection, CountLines, LineLength);
             SaveSettings();
-            RevitCommand.mainView.Close();
+            //RevitCommand.mainView.Close();
         }
         private bool CanCreateLinesCommandExecute(object parameter)
         {

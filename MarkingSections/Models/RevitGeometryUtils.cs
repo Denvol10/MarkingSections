@@ -25,12 +25,14 @@ namespace MarkingSections.Models
         }
 
         // Получение начальной линии
-        public static Curve GetStartLine(UIApplication uiapp, out string elementIds)
+        public static Curve GetStartLine(UIApplication uiapp, out string elementIds, out SketchPlane sketchPlane)
         {
             Selection sel = uiapp.ActiveUIDocument.Selection;
             var boundCurvePicked = sel.PickObject(ObjectType.Element, new ModelLineElementFilter() ,"Выберете начальную линию");
             Options options = new Options();
             Element curveElement = uiapp.ActiveUIDocument.Document.GetElement(boundCurvePicked);
+            var modelCurve = curveElement as ModelCurve;
+            sketchPlane = modelCurve.SketchPlane;
             elementIds = "Id" + curveElement.Id.IntegerValue;
             var boundCurve = curveElement.get_Geometry(options).First() as Curve;
 
@@ -38,11 +40,12 @@ namespace MarkingSections.Models
         }
 
         // Получение линии по Id
-        public static Curve GetStartLineById(Document doc, string elemIdInSettings)
+        public static Curve GetStartLineById(Document doc, string elemIdInSettings, out SketchPlane sketchPlane)
         {
             var elemId = GetIdsByString(elemIdInSettings).First();
             ElementId modelLineId = new ElementId(elemId);
-            Element modelLine = doc.GetElement(modelLineId);
+            var modelLine = doc.GetElement(modelLineId) as ModelCurve;
+            sketchPlane = modelLine.SketchPlane;
             Options options = new Options();
             Curve line = modelLine.get_Geometry(options).First() as Curve;
 
