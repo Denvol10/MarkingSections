@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="357"
-        Width="350"
+        Width="365"
         Background="#f0f0f0"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
@@ -105,7 +105,7 @@
                 <UniformGrid Columns="2">
                     <TextBlock Text="Расстояние между линиями, м"
                                Style="{StaticResource TextAboveButton}"
-                               HorizontalAlignment="Left" />
+                               HorizontalAlignment="Left"/>
                     <TextBox Text="{Binding DistanceBetweenLines, UpdateSourceTrigger=PropertyChanged}"
                              Width="60"
                              Height="20"
@@ -133,7 +133,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="110" />
-                        <ColumnDefinition Width="115" />
+                        <ColumnDefinition Width="122" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
